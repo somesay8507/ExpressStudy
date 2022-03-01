@@ -22,8 +22,8 @@ app.get('/', function(request, response) {
   });
 }); //get이라는 메소드를 호출하고, 그 메소드의 첫 번째 인자로 패스를 전달하는걸 통해서 라우팅 하고 있는것
 
-app.get('/page', function(req, res) {
-  return res.send('/page');
+app.get('/page/:pageId', function(request, response) {
+  response.send(request.params);
 }); 
 
 app.listen(port, () => {
