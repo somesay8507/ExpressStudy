@@ -3,13 +3,22 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+// app.get('/', (req, res) => {
+//   res.send('Hello World!')
+// }) -> 최신 코딩
+
+app.get('/', function(req, res) {
+  return res.send('/');
+}); //get이라는 메소드를 호출하고, 그 메소드의 첫 번째 인자로 패스를 전달하는걸 통해서 라우팅 하고 있는것
+
+app.get('/page', function(req, res) {
+  return res.send('/page');
+}); 
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-})
+}) //애플리케이션 객체에 listen 메소드의 첫번째 인자에 3000를 주면 메소드가 실행될 때 웹서버가 실행되면서
+   // 3000번포트에 listen이 성공하게되면 저 코딩이 실행하게된다. 
 
 /*
 var http = require('http');
