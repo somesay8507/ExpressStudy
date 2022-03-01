@@ -1,14 +1,25 @@
 //Express 첫 웹서버 구축
 const express = require('express')
 const app = express()
+var fs = require('fs');
+var template = require('./lib/template.js');
 const port = 3000
 
 // app.get('/', (req, res) => {
 //   res.send('Hello World!')
 // }) -> 최신 코딩
 
-app.get('/', function(req, res) {
-  return res.send('/');
+app.get('/', function(request, response) {
+  fs.readdir('./data', function(error, filelist){
+    var title = 'Welcome';
+    var description = 'Hello, Node.js';
+    var list = template.list(filelist);
+    var html = template.HTML(title, list,
+      `<h2>${title}</h2>${description}`,
+      `<a href="/create">create</a>`
+    );
+    response.send(html);
+  });
 }); //get이라는 메소드를 호출하고, 그 메소드의 첫 번째 인자로 패스를 전달하는걸 통해서 라우팅 하고 있는것
 
 app.get('/page', function(req, res) {
