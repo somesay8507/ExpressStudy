@@ -1,18 +1,19 @@
-//Express 첫 웹서버 구축
-const express = require('express')
-const app = express()
+var express = require('express')
+var app = express()
 var fs = require('fs');
-var template = require('./lib/template.js');
 var path = require('path');
-var sanitizeHtml = require('sanitize-html');
 var qs = require('querystring');
-const port = 3000
+var sanitizeHtml = require('sanitize-html');
+var template = require('./lib/template.js');
 
-// app.get('/', (req, res) => {
-//   res.send('Hello World!')
-// }) -> 최신 코딩
+/* bodyParser 사용하면 무한루프에 빠짐
+ var bodyParser = require('body-parser');
+ app.use(express.urlencoded({ extended: false }));
+ */
 
-app.get('/', function(request, response) {
+//route, routing
+//app.get('/', (req, res) => res.send('Hello World!'))
+app.get('/', function(request, response) { 
   fs.readdir('./data', function(error, filelist){
     var title = 'Welcome';
     var description = 'Hello, Node.js';
@@ -20,12 +21,12 @@ app.get('/', function(request, response) {
     var html = template.HTML(title, list,
       `<h2>${title}</h2>${description}`,
       `<a href="/create">create</a>`
-    );
+    ); 
     response.send(html);
   });
-}); //get이라는 메소드를 호출하고, 그 메소드의 첫 번째 인자로 패스를 전달하는걸 통해서 라우팅 하고 있는것
-
-app.get('/page/:pageId', function(request, response) {
+});
+ 
+app.get('/page/:pageId', function(request, response) { 
   fs.readdir('./data', function(error, filelist){
     var filteredId = path.parse(request.params.pageId).base;
     fs.readFile(`data/${filteredId}`, 'utf8', function(err, description){
@@ -47,14 +48,14 @@ app.get('/page/:pageId', function(request, response) {
       response.send(html);
     });
   });
-}); 
-
-app.get('/create', function(request,response) {
+});
+ 
+app.get('/create', function(request, response){
   fs.readdir('./data', function(error, filelist){
     var title = 'WEB - create';
     var list = template.list(filelist);
     var html = template.HTML(title, list, `
-      <form action="/create" method="post">
+      <form action="/create_process" method="post">
         <p><input type="text" name="title" placeholder="title"></p>
         <p>
           <textarea name="description" placeholder="description"></textarea>
@@ -67,8 +68,8 @@ app.get('/create', function(request,response) {
     response.send(html);
   });
 });
-
-app.post('/create_process', function(request,response){
+ 
+app.post('/create_process', function(request, response){
   var body = '';
   request.on('data', function(data){
       body = body + data;
@@ -83,8 +84,8 @@ app.post('/create_process', function(request,response){
       })
   });
 });
-
-app.get('/update/:pageId', function(request,response) {
+ 
+app.get('/update/:pageId', function(request, response){
   fs.readdir('./data', function(error, filelist){
     var filteredId = path.parse(request.params.pageId).base;
     fs.readFile(`data/${filteredId}`, 'utf8', function(err, description){
@@ -109,8 +110,8 @@ app.get('/update/:pageId', function(request,response) {
     });
   });
 });
-
-app.post('/update_process', function(request,response){
+ 
+app.post('/update_process', function(request, response){
   var body = '';
   request.on('data', function(data){
       body = body + data;
@@ -121,14 +122,14 @@ app.post('/update_process', function(request,response){
       var title = post.title;
       var description = post.description;
       fs.rename(`data/${id}`, `data/${title}`, function(error){
-        fs.writeFile(`data/${title}`, description, 'utf8', function(err){;
+        fs.writeFile(`data/${title}`, description, 'utf8', function(err){
           response.redirect(`/?id=${title}`);
         })
       });
   });
 });
-
-app.post('/delete_process', function(request,response){
+ 
+app.post('/delete_process', function(request, response){
   var body = '';
   request.on('data', function(data){
       body = body + data;
@@ -142,42 +143,7 @@ app.post('/delete_process', function(request,response){
       })
   });
 });
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-}) //애플리케이션 객체에 listen 메소드의 첫번째 인자에 3000를 주면 메소드가 실행될 때 웹서버가 실행되면서
-   // 3000번포트에 listen이 성공하게되면 저 코딩이 실행하게된다. 
-
-/*
-var http = require('http');
-var fs = require('fs');
-var url = require('url');
-var qs = require('querystring');
-var template = require('./lib/template.js');
-var path = require('path');
-var sanitizeHtml = require('sanitize-html');
-
-var app = http.createServer(function(request,response){
-    var _url = request.url;
-    var queryData = url.parse(_url, true).query;
-    var pathname = url.parse(_url, true).pathname;
-    if(pathname === '/'){
-      if(queryData.id === undefined){  
-      } else {
-      }
-    } else if(pathname === '/create'){
-    } else if(pathname === '/create_process'){
-    } else if(pathname === '/update'){
-    } else if(pathname === '/update_process'){
-     
-    } else if(pathname === '/delete_process'){
-     
-    } else {
-      response.writeHead(404);
-      response.end('Not found');
-    }
+ 
+app.listen(3000, function() {
+  console.log('Example app listening on port 3000!')
 });
-app.listen(3000);
-*/
-
-
