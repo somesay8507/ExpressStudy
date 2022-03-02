@@ -20,6 +20,8 @@ module.exports = {
     var i = 0;
     while(i < filelist.length){
       list = list + `<li><a href="/page/${filelist[i]}">${filelist[i]}</a></li>`;
+      //=> url 잘못된 파라미터 입력하기 때문에 에러남.
+      //     ㄴ> a href="/page/=${filelist[i]}" X
       i = i + 1;
     }
     list = list+'</ul>';
