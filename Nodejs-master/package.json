@@ -21,9 +21,10 @@
   "homepage": "https://github.com/web-n/Nodejs#readme",
   "dependencies": {
     "body-parser": "^1.19.2",
+    "compression": "^1.7.4",
     "express": "^4.17.3",
-    "path": "^0.12.7",
     "helmet": "^3.12.1",
+    "path": "^0.12.7",
     "querystring": "^0.2.1",
     "sanitize-html": "^1.18.2"
   }

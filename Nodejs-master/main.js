@@ -5,6 +5,12 @@ var path = require('path');
 var qs = require('querystring');
 var sanitizeHtml = require('sanitize-html');
 var template = require('./lib/template.js');
+var compression = require('compression');
+
+app.use(compression());
+app.use(function(request, response,next) {
+
+})
 
 /* bodyParser 사용하면 무한루프에 빠짐
  var bodyParser = require('body-parser');
